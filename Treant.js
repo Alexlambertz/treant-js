@@ -1309,6 +1309,10 @@
 
 			this.text = nodeStructure.text;
 
+			// Customizing to add onClick Callback
+			// Added unique_name as identifier for callback onClick
+			this.unique_name = nodeStructure.unique_name;
+
 			// '.node' DIV
 			this.nodeInnerHTML = nodeStructure.innerHTML;
 			this.nodeHTMLclass = (tree.CONFIG.node.HTMLclass ? tree.CONFIG.node.HTMLclass : '') + // globally defined class for the nodex
@@ -1820,6 +1824,14 @@
 			};
 		}
 
+		// Customizing to add onClick Callback
+		UTIL.addEvent( node, 'click',
+			function( e ) {
+				var tempId = this.unique_name || this.text.name || null;
+				tree.CONFIG.callback.onClick.apply( self, [ tempId, node, e ] );
+			}.bind(this)
+		);
+
 		/////////// CREATE innerHTML //////////////
 		if ( !this.pseudo ) {
 			if ( !this.nodeInnerHTML ) {
@@ -1979,6 +1991,7 @@
 			onToggleCollapseFinished: function ( treeNode, bIsCollapsed ) {}, // this = Tree
 			onAfterClickCollapseSwitch: function( nodeSwitch, event ) {}, // this = TreeNode
 			onBeforeClickCollapseSwitch: function( nodeSwitch, event ) {}, // this = TreeNode
+			onClick: function( NodeId, TreeNode, event ) {}, // this = TreeNode
 			onTreeLoaded: function( rootTreeNode ) {} // this = Tree
 		}
 	};
